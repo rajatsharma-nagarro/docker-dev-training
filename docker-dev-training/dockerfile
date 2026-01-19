@@ -1,0 +1,12 @@
+FROM amazoncorretto:17
+MAINTAINER RajatSharma
+
+WORKDIR /tmp
+
+VOLUME ["/tmp/log"]
+COPY target/backend-common-part-master-service-preprod_env.jar /tmp/backend-common-part-master-service-preprod_env.jar
+COPY src/main/resources/listener-registry-config.json /tmp/listener-registry-config.json
+ENTRYPOINT ["java", "-jar", "/tmp/backend-common-part-master-service-preprod_env.jar"]
+CMD ["--spring.profiles.active=${ACTIVE_PROFILE}"]
+
+EXPOSE 8095
