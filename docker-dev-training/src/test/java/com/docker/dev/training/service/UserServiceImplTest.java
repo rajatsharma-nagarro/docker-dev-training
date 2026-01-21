@@ -36,7 +36,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void getUserById_UserExists_ReturnsUser() {
+    void getUserByName_UserExists_ReturnsUser() {
         User user = new User();
         user.setId("1");
         when(userRepository.findByUsername("1")).thenReturn(Optional.of(user));
@@ -48,10 +48,10 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void getUserById_UserNotFound_ReturnsNull() {
-        when(userRepository.findById("2")).thenReturn(Optional.empty());
+    void getUserByUserName_UserNotFound_ReturnsNull() {
+        when(userRepository.findByUsername("2")).thenReturn(Optional.empty());
 
-        User result = userService.getUserById("userName");
+        User result = userService.getUserById("2");
 
         assertNull(result);
     }
