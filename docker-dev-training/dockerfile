@@ -10,9 +10,6 @@ VOLUME ["/app/logs"]
 # Copy the built JAR file
 COPY target/*.jar /app/app.jar
 
-# Copy any required resource files (optional)
-COPY src/main/resources/listener-registry-config.json /app/listener-registry-config.json
-
 # Expose the application port
 EXPOSE 8095
 
