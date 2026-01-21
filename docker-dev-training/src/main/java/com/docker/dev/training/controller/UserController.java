@@ -32,7 +32,7 @@ public class UserController {
      * @return User object
      */
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
+    public User getUserById(@PathVariable String id) {
         log.info("Fetching user with ID: {}", id);
         return userService.getUserById(id);
     }

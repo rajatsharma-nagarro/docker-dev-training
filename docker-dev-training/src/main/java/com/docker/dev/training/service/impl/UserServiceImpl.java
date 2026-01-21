@@ -22,9 +22,9 @@ public class UserServiceImpl implements UserService {
     private ObjectMapper objectMapper;
 
     @Override
-    public User getUserById(Long id) {
+    public User getUserById(String id) {
         log.info("Fetching user with ID: {}", id);
-        Optional<User> user = userRepository.findById(String.valueOf(id));
+        Optional<User> user = userRepository.findById(id);
         return user.orElse(null);
     }
 
