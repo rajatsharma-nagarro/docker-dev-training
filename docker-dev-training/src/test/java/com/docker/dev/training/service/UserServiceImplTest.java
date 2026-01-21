@@ -39,9 +39,9 @@ public class UserServiceImplTest {
     void getUserById_UserExists_ReturnsUser() {
         User user = new User();
         user.setId("1");
-        when(userRepository.findById("1")).thenReturn(Optional.of(user));
+        when(userRepository.findByUsername("1")).thenReturn(Optional.of(user));
 
-        User result = userService.getUserById("userName");
+        User result = userService.getUserById("1");
 
         assertNotNull(result);
         assertEquals("1", result.getId());
@@ -83,7 +83,7 @@ public class UserServiceImplTest {
         user.setUsername(username);
         user.setPassword(password);
 
-        when(userRepository.findByUsername(username)).thenReturn(user);
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 
         boolean result = userService.loginUser(username, password);
 
@@ -98,7 +98,7 @@ public class UserServiceImplTest {
         user.setUsername(username);
         user.setPassword("pass");
 
-        when(userRepository.findByUsername(username)).thenReturn(user);
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 
         boolean result = userService.loginUser(username, password);
 
@@ -107,7 +107,7 @@ public class UserServiceImplTest {
 
     @Test
     void loginUser_UserNotFound_ReturnsFalse() {
-        when(userRepository.findByUsername("nouser")).thenReturn(null);
+        when(userRepository.findByUsername("nouser")).thenReturn(Optional.empty());
 
         boolean result = userService.loginUser("nouser", "pass");
 

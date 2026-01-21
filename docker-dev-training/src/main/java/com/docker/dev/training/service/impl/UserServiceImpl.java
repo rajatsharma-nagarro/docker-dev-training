@@ -22,9 +22,9 @@ public class UserServiceImpl implements UserService {
     private ObjectMapper objectMapper;
 
     @Override
-    public User getUserById(String id) {
-        log.info("Fetching user with ID: {}", id);
-        Optional<User> user = userRepository.findById(id);
+    public User getUserById(String userName) {
+        log.info("Fetching user with userName: {}", userName);
+        Optional<User> user = userRepository.findByUsername(userName);
         return user.orElse(null);
     }
 
@@ -38,8 +38,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean loginUser(String username, String password) {
         log.info("Attempting login for user: {}", username);
-        User user = userRepository.findByUsername(username);
-        if (user != null && user.getPassword().equals(password)) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent() && user.get().getPassword().equals(password)) {
             log.info("Login successful for user: {}", username);
             return true;
         }
