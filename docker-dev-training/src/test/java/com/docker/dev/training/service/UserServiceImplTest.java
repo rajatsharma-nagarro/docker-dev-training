@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
@@ -112,5 +113,19 @@ public class UserServiceImplTest {
         boolean result = userService.loginUser("nouser", "pass");
 
         assertFalse(result);
+    }
+
+    @Test
+    void addUser_UsernameAlreadyExists_ThrowsException() {
+        UserRequestDto dto = new UserRequestDto();
+        dto.setUsername("existinguser");
+        dto.setPassword("pass");
+
+        User existingUser = new User();
+        existingUser.setUsername("existinguser");
+
+        when(userRepository.findByUsername("existinguser")).thenReturn(Optional.of(existingUser));
+
+        assertThrows(IllegalArgumentException.class, () -> userService.addUser(dto));
     }
 }

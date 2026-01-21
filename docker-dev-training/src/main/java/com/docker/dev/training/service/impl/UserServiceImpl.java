@@ -31,6 +31,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User addUser(UserRequestDto userRequestDto) {
         log.info("Adding new userRequestDto: {}", userRequestDto.getUsername());
+        Optional<User> existingUser = userRepository.findByUsername(userRequestDto.getUsername());
+        if (existingUser.isPresent()) {
+            throw new IllegalArgumentException("Username already exists. Please use another name.");
+        }
         User user = objectMapper.convertValue(userRequestDto, User.class);
         return userRepository.save(user);
     }
