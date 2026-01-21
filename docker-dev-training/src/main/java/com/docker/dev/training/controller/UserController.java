@@ -5,6 +5,7 @@ import com.docker.dev.training.model.User;
 import com.docker.dev.training.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @RequestMapping("/user/v1")
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
     @Autowired
@@ -25,6 +27,7 @@ public class UserController {
 
     /**
      * Fetch a user by ID.
+     *
      * @param id User ID
      * @return User object
      */
@@ -36,6 +39,7 @@ public class UserController {
 
     /**
      * Add a new user.
+     *
      * @param userRequestDto User object from request body
      * @return Created User object
      */
@@ -47,21 +51,15 @@ public class UserController {
 
     /**
      * Login a user.
+     *
      * @param userRequestDto User object with username and password
      * @return Login status message
      */
     @PostMapping("/login")
-    public String loginUser(@RequestBody UserRequestDto userRequestDto) {
+    public boolean loginUser(@RequestBody UserRequestDto userRequestDto) {
         log.info("Attempting login for user: {}", userRequestDto.getUsername());
         boolean success = userService.loginUser(userRequestDto.getUsername(), userRequestDto.getPassword());
-        if (success) {
-            log.info("Login successful for user: {}", userRequestDto.getUsername());
-            return "Login successful";
-        } else {
-            log.info("Login failed for user: {}", userRequestDto.getUsername());
-            return "Invalid credentials";
-        }
+        log.info("Login {} for user: {}", success ? "successful" : "failed", userRequestDto.getUsername());
+        return success;
     }
-
-
 }
