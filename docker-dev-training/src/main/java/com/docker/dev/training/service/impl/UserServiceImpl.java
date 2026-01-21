@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     private ObjectMapper objectMapper;
 
     @Override
-    public User getUserById(String userName) {
+    public User getUserByUserName(String userName) {
         log.info("Fetching user with userName: {}", userName);
         Optional<User> user = userRepository.findByUsername(userName);
         return user.orElse(null);

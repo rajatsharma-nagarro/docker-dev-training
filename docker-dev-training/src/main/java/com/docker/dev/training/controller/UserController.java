@@ -28,13 +28,13 @@ public class UserController {
     /**
      * Fetch a user by ID.
      *
-     * @param id User ID
+     * @param userName User Name
      * @return User object
      */
-    @GetMapping("/{id}")
-    public User getUserById(@PathVariable String id) {
-        log.info("Fetching user with ID: {}", id);
-        return userService.getUserById(id);
+    @GetMapping("/{userName}")
+    public User getUserByUserName(@PathVariable String userName) {
+        log.info("Fetching user with ID: {}", userName);
+        return userService.getUserByUserName(userName);
     }
 
     /**

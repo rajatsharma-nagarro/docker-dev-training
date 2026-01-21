@@ -7,7 +7,7 @@ import com.docker.dev.training.model.User;
  * Service for user operations.
  */
 public interface UserService {
-    User getUserById(String id);
+    User getUserByUserName(String id);
 
     User addUser(UserRequestDto userRequestDto);
 

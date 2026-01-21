@@ -41,7 +41,7 @@ public class UserServiceImplTest {
         user.setId("1");
         when(userRepository.findByUsername("1")).thenReturn(Optional.of(user));
 
-        User result = userService.getUserById("1");
+        User result = userService.getUserByUserName("1");
 
         assertNotNull(result);
         assertEquals("1", result.getId());
@@ -51,7 +51,7 @@ public class UserServiceImplTest {
     void getUserByUserName_UserNotFound_ReturnsNull() {
         when(userRepository.findByUsername("2")).thenReturn(Optional.empty());
 
-        User result = userService.getUserById("2");
+        User result = userService.getUserByUserName("2");
 
         assertNull(result);
     }
