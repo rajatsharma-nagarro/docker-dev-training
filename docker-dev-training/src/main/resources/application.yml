@@ -1,0 +1,21 @@
+server:
+  servlet:
+    contextPath: /api/
+  port: 8080
+
+spring:
+  application:
+    name: DOCKER-DEV-TRAINING-SERVICE
+    version: 1.0.0
+  profiles:
+    active: local
+  data:
+    mongodb:
+      maxMongoPoolConnectionIdleTimeInSeconds: 60
+
+logging:
+  level:
+    root: INFO
+    com.docker: INFO
+    org.springframework: INFO
+
