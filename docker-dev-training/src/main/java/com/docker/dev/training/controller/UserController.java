@@ -5,6 +5,8 @@ import com.docker.dev.training.model.User;
 import com.docker.dev.training.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,12 +14,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 /**
  * REST controller for user operations.
  */
 @RestController
 @Slf4j
 @RequestMapping("/user/v1")
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
     @Autowired
@@ -25,43 +30,45 @@ public class UserController {
 
     /**
      * Fetch a user by ID.
-     * @param id User ID
+     *
+     * @param userName User Name
      * @return User object
      */
-    @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
-        log.info("Fetching user with ID: {}", id);
-        return userService.getUserById(id);
+    @GetMapping("/{userName}")
+    public User getUserByUserName(@PathVariable String userName) {
+        log.info("Fetching user with ID: {}", userName);
+        return userService.getUserByUserName(userName);
     }
 
     /**
      * Add a new user.
+     *
      * @param userRequestDto User object from request body
      * @return Created User object
      */
     @PostMapping
-    public User addUser(@RequestBody UserRequestDto userRequestDto) {
+    public ResponseEntity<?> addUser(@RequestBody UserRequestDto userRequestDto) {
         log.info("Adding new user: {}", userRequestDto.getUsername());
-        return userService.addUser(userRequestDto);
+        User user = userService.addUser(userRequestDto);
+        if (user == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(Map.of("message", "Username already exists. Please use another name."));
+        }
+        return ResponseEntity.ok(user);
     }
 
     /**
      * Login a user.
+     *
      * @param userRequestDto User object with username and password
      * @return Login status message
      */
     @PostMapping("/login")
-    public String loginUser(@RequestBody UserRequestDto userRequestDto) {
+    public boolean loginUser(@RequestBody UserRequestDto userRequestDto) {
         log.info("Attempting login for user: {}", userRequestDto.getUsername());
         boolean success = userService.loginUser(userRequestDto.getUsername(), userRequestDto.getPassword());
-        if (success) {
-            log.info("Login successful for user: {}", userRequestDto.getUsername());
-            return "Login successful";
-        } else {
-            log.info("Login failed for user: {}", userRequestDto.getUsername());
-            return "Invalid credentials";
-        }
+        log.info("Login {} for user: {}", success ? "successful" : "failed", userRequestDto.getUsername());
+        return success;
     }
-
-
 }

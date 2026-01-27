@@ -3,6 +3,8 @@ package com.docker.dev.training.repository;
 import com.docker.dev.training.model.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.Optional;
+
 public interface UserRepository extends MongoRepository<User, String> {
 
     /**
@@ -11,5 +13,5 @@ public interface UserRepository extends MongoRepository<User, String> {
      * @param username the username to search for
      * @return the User object, or null if not found
      */
-    User findByUsername(String username);
+    Optional<User> findByUsername(String username);
 }

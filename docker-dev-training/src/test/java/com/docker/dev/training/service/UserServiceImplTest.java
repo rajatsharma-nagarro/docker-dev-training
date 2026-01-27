@@ -36,22 +36,22 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void getUserById_UserExists_ReturnsUser() {
+    void getUserByName_UserExists_ReturnsUser() {
         User user = new User();
         user.setId("1");
-        when(userRepository.findById("1")).thenReturn(Optional.of(user));
+        when(userRepository.findByUsername("1")).thenReturn(Optional.of(user));
 
-        User result = userService.getUserById(1L);
+        User result = userService.getUserByUserName("1");
 
         assertNotNull(result);
         assertEquals("1", result.getId());
     }
 
     @Test
-    void getUserById_UserNotFound_ReturnsNull() {
-        when(userRepository.findById("2")).thenReturn(Optional.empty());
+    void getUserByUserName_UserNotFound_ReturnsNull() {
+        when(userRepository.findByUsername("2")).thenReturn(Optional.empty());
 
-        User result = userService.getUserById(2L);
+        User result = userService.getUserByUserName("2");
 
         assertNull(result);
     }
@@ -83,7 +83,7 @@ public class UserServiceImplTest {
         user.setUsername(username);
         user.setPassword(password);
 
-        when(userRepository.findByUsername(username)).thenReturn(user);
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 
         boolean result = userService.loginUser(username, password);
 
@@ -98,7 +98,7 @@ public class UserServiceImplTest {
         user.setUsername(username);
         user.setPassword("pass");
 
-        when(userRepository.findByUsername(username)).thenReturn(user);
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 
         boolean result = userService.loginUser(username, password);
 
@@ -107,10 +107,26 @@ public class UserServiceImplTest {
 
     @Test
     void loginUser_UserNotFound_ReturnsFalse() {
-        when(userRepository.findByUsername("nouser")).thenReturn(null);
+        when(userRepository.findByUsername("nouser")).thenReturn(Optional.empty());
 
         boolean result = userService.loginUser("nouser", "pass");
 
         assertFalse(result);
+    }
+
+    @Test
+    void addUser_UsernameAlreadyExists_ReturnsNull() {
+        UserRequestDto dto = new UserRequestDto();
+        dto.setUsername("existinguser");
+        dto.setPassword("pass");
+
+        User existingUser = new User();
+        existingUser.setUsername("existinguser");
+
+        when(userRepository.findByUsername("existinguser")).thenReturn(Optional.of(existingUser));
+
+        User result = userService.addUser(dto);
+
+        assertNull(result);
     }
 }

@@ -10,11 +10,8 @@ VOLUME ["/app/logs"]
 # Copy the built JAR file
 COPY target/*.jar /app/app.jar
 
-# Copy any required resource files (optional)
-COPY src/main/resources/listener-registry-config.json /app/listener-registry-config.json
-
 # Expose the application port
-EXPOSE 8095
+EXPOSE 8080
 
 # Set the default active Spring profile (can be overridden at runtime)
 ENV SPRING_PROFILES_ACTIVE=default
