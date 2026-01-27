@@ -11,7 +11,7 @@ VOLUME ["/app/logs"]
 COPY target/*.jar /app/app.jar
 
 # Expose the application port
-EXPOSE 8095
+EXPOSE 8080
 
 # Set the default active Spring profile (can be overridden at runtime)
 ENV SPRING_PROFILES_ACTIVE=default
