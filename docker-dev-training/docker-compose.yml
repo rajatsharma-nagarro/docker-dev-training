@@ -18,7 +18,7 @@ services:
   backend:
     image: rajatsharma04/docker-training-be:1.0.0
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://myuser:mypassword@localhost:27017/user-information-db?authSource=admin
+      SPRING_DATA_MONGODB_URI: mongodb://myuser:mypassword@mongo:27017/user-information-db?authSource=admin
     depends_on:
       mongo:
         condition: service_healthy
