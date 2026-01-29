@@ -12,7 +12,7 @@ spring:
   data:
     mongodb:
       maxMongoPoolConnectionIdleTimeInSeconds: 60
-      uri: mongodb://localhost:27017/user-information-db
+      uri: mongodb://mongo:27017/user-information-db
       database: user-information-db
       auto-index-creation: false
       max-pool-size: 5
