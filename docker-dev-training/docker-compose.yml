@@ -6,7 +6,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: myuser
       MONGO_INITDB_ROOT_PASSWORD: mypassword
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/mydb --username myuser --password mypassword --authenticationDatabase admin --quiet
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/user-information-db --username myuser --password mypassword --authenticationDatabase admin --quiet
       interval: 10s
       timeout: 5s
       retries: 5
@@ -18,7 +18,7 @@ services:
   backend:
     image: rajatsharma04/docker-training-be:1.0.0
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://myuser:mypassword@mongo:27017/user-information-db?authSource=admin
+      SPRING_DATA_MONGODB_URI: mongodb://myuser:mypassword@localhost:27017/user-information-db?authSource=admin
     depends_on:
       mongo:
         condition: service_healthy
