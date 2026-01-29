@@ -5,6 +5,11 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: myuser
       MONGO_INITDB_ROOT_PASSWORD: mypassword
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/mydb --username myuser --password mypassword --authenticationDatabase admin --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
     ports:
       - "27017:27017"
     networks:
@@ -15,7 +20,9 @@ services:
     environment:
       SPRING_DATA_MONGODB_URI: mongodb://myuser:mypassword@mongo:27017/mydb?authSource=admin
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
+    restart: on-failure
     ports:
       - "8080:8080"
     networks:
