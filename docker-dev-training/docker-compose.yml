@@ -6,7 +6,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: myuser
       MONGO_INITDB_ROOT_PASSWORD: mypassword
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/user-information-db --username myuser --password mypassword --authenticationDatabase admin --quiet
+      test: echo 'db.runCommand("ping").ok' | mongosh mongo:27017/user-information-db --username myuser --password mypassword --authenticationDatabase admin --quiet
       interval: 10s
       timeout: 5s
       retries: 5
