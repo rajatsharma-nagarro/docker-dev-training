@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:6
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: myuser
+      MONGO_INITDB_ROOT_PASSWORD: mypassword
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+
+  backend:
+    image: rajatsharma04/docker-training-be:latest
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://myuser:mypassword@mongo:27017/mydb?authSource=admin
+    depends_on:
+      - mongo
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+
+  frontend:
+    image: rajatsharma04/docker-training-fe:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
