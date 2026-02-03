@@ -8,7 +8,7 @@ spring:
     name: DOCKER-DEV-TRAINING-SERVICE
     version: 1.0.0
   profiles:
-    active: local
+    active: docker
   data:
     mongodb:
       maxMongoPoolConnectionIdleTimeInSeconds: 60

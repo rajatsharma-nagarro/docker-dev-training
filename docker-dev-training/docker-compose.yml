@@ -3,7 +3,6 @@ version: "3.8"
 services:
   mongo:
     image: mongo:6.0.17
-    container_name: mongo
     hostname: mongo
     restart: unless-stopped
     ports:
@@ -30,7 +29,6 @@ services:
 
   backend:
     image: rajatsharma04/docker-training-be:1.0.1
-    container_name: docker-training-be
     restart: unless-stopped
     depends_on:
       mongo:
@@ -52,7 +50,6 @@ services:
 
   frontend:
     image: rajatsharma04/docker-training-fe:1.0.1
-    container_name: docker-training-fe
     restart: unless-stopped
     depends_on:
       backend:
