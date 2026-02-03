@@ -8,7 +8,7 @@ spring:
     name: DOCKER-DEV-TRAINING-SERVICE
   data:
     mongodb:
-      uri: ${SPRING_DATA_MONGODB_URI}
+      uri: mongodb://myuser:mypassword@mongo:27017/user-information-db?authSource=admin
       auto-index-creation: true
       authentication-database: admin
 

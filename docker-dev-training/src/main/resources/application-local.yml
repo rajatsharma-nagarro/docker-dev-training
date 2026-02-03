@@ -1,6 +1,0 @@
-spring:
-  data:
-    mongodb:
-      database: user-information-db
-      auto-index-creation: false
-      max-pool-size: 5
