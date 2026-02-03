@@ -8,7 +8,10 @@ spring:
     name: DOCKER-DEV-TRAINING-SERVICE
   data:
     mongodb:
-      uri: mongodb://myuser:mypassword@mongo:27017/user-information-db?authSource=admin
+      host: mongo
+      port: 27017
+      database: user-information-db
+      uri: mongodb://myuser:mypassword@host.docker.internal:27017/user-information-db?authSource=admin
       auto-index-creation: true
       authentication-database: admin
 
