@@ -38,7 +38,6 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATA_MONGODB_URI=mongodb://myuser:mypassword@mongo:27017/user-information-db?authSource=admin
-      - SPRING_APPLICATION_JSON={"spring":{"data":{"mongodb":{"uri":"mongodb://myuser:mypassword@mongo:27017/user-information-db?authSource=admin","auto-index-creation":"true","authentication-database":"admin"}}}}
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
       interval: 10s
