@@ -11,10 +11,14 @@ spring:
       host: mongo
       port: 27017
       database: user-information-db
-      uri: ${SPRING_DATA_MONGODB_URI}
+      uri: mongodb://myuser:mypassword@mongo:27017/user-information-db?authSource=admin
       auto-index-creation: true
       authentication-database: admin
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: env,health,info
 logging:
   level:
     root: INFO
