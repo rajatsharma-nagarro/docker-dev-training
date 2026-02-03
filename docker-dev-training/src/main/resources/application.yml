@@ -15,7 +15,7 @@ spring:
       database: user-information-db
       auto-index-creation: false
       max-pool-size: 5
-      uri: ${SPRING_DATA_MONGODB_URI}
+      uri: mongodb://myuser:mypassword@mongo:27017/user-information-db?authSource=admin
 
 logging:
   level:
