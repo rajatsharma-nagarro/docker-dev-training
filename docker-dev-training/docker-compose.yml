@@ -3,60 +3,60 @@ version: "3.8"
 services:
   mongo:
     image: mongo:6.0.17
+    container_name: mongo
+    hostname: mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: myuser
-      MONGO_INITDB_ROOT_PASSWORD: mypassword
-      MONGO_INITDB_DATABASE: user-information-db
+      - MONGO_INITDB_ROOT_USERNAME=myuser
+      - MONGO_INITDB_ROOT_PASSWORD=mypassword
+      - MONGO_INITDB_DATABASE=user-information-db
     volumes:
-      - mongo-data:/data/db
+      - "./data/db:/data/db"
+      - "./data/log:/var/log/mongodb"
+      - "./initdb:/docker-entrypoint-initdb.d"
+    command: [ "--bind_ip", "0.0.0.0" ]
     healthcheck:
       test: >
         mongosh --host mongo --port 27017
-        -u myuser -p mypassword --authenticationDatabase admin --quiet
-        --eval 'db.adminCommand({ ping: 1 }).ok' | grep 1
+        -u "myuser" -p "mypassword"
+        --authenticationDatabase admin --quiet
+        --eval 'db.adminCommand({ ping: 1 }).ok' | grep -q 1 || exit 1
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
-    restart: unless-stopped
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
     networks:
       - app-network
 
   backend:
     image: rajatsharma04/docker-training-be:1.0.1
-    environment:
-      SPRING_DATA_MONGODB_URI: mongodb://myuser:mypassword@mongo:27017/user-information-db?authSource=admin
+    container_name: docker-training-be
+    restart: unless-stopped
     depends_on:
       mongo:
         condition: service_healthy
-    restart: unless-stopped
     ports:
       - "8080:8080"
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATA_MONGODB_URI=mongodb://myuser:mypassword@mongo:27017/user-information-db?authSource=admin
+      - SPRING_APPLICATION_JSON={"spring":{"data":{"mongodb":{"uri":"mongodb://myuser:mypassword@mongo:27017/user-information-db?authSource=admin","auto-index-creation":"true","authentication-database":"admin"}}}}
     networks:
       - app-network
 
   frontend:
     image: rajatsharma04/docker-training-fe:1.0.1
+    container_name: docker-training-fe
+    restart: unless-stopped
     depends_on:
-      - backend
+      backend:
+        condition: service_started
     ports:
       - "3000:80"
-    restart: unless-stopped
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
+    environment:
+      - API_BASE_URL=http://backend:8080/api/
     networks:
       - app-network
 

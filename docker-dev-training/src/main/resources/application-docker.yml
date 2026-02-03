@@ -1,0 +1,19 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/
+
+spring:
+  application:
+    name: DOCKER-DEV-TRAINING-SERVICE
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI}
+      auto-index-creation: true
+      authentication-database: admin
+
+logging:
+  level:
+    root: INFO
+    com.docker: INFO
+    org.springframework: INFO
