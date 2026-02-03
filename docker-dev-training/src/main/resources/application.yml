@@ -15,6 +15,7 @@ spring:
       database: user-information-db
       auto-index-creation: false
       max-pool-size: 5
+      uri: ${SPRING_DATA_MONGODB_URI}
 
 logging:
   level:
