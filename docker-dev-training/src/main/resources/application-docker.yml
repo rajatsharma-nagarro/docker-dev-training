@@ -11,7 +11,7 @@ spring:
       host: mongo
       port: 27017
       database: user-information-db
-      uri: mongodb://myuser:mypassword@host.docker.internal:27017/user-information-db?authSource=admin
+      uri: ${SPRING_DATA_MONGODB_URI}
       auto-index-creation: true
       authentication-database: admin
 
