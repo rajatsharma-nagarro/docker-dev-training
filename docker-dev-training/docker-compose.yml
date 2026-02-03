@@ -13,9 +13,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=mypassword
       - MONGO_INITDB_DATABASE=user-information-db
     volumes:
-      - "./data/db:/data/db"
-      - "./data/log:/var/log/mongodb"
-      - "./initdb:/docker-entrypoint-initdb.d"
+      - mongo-data:/data/db
     command: [ "--bind_ip", "0.0.0.0" ]
     healthcheck:
       test: >
@@ -43,6 +41,12 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATA_MONGODB_URI=mongodb://myuser:mypassword@mongo:27017/user-information-db?authSource=admin
       - SPRING_APPLICATION_JSON={"spring":{"data":{"mongodb":{"uri":"mongodb://myuser:mypassword@mongo:27017/user-information-db?authSource=admin","auto-index-creation":"true","authentication-database":"admin"}}}}
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
     networks:
       - app-network
 
@@ -52,7 +56,7 @@ services:
     restart: unless-stopped
     depends_on:
       backend:
-        condition: service_started
+        condition: service_healthy
     ports:
       - "3000:80"
     environment:
