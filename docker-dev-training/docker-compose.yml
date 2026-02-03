@@ -16,7 +16,7 @@ services:
       - app-network
 
   backend:
-    image: rajatsharma04/docker-training-be:1.0.0
+    image: rajatsharma04/docker-training-be:1.0.1
     environment:
       SPRING_DATA_MONGODB_URI: mongodb://myuser:mypassword@mongo:27017/user-information-db?authSource=admin
     depends_on:
@@ -29,7 +29,7 @@ services:
       - app-network
 
   frontend:
-    image: rajatsharma04/docker-training-fe:1.0.0
+    image: rajatsharma04/docker-training-fe:1.0.1
     ports:
       - "3000:3000"
     depends_on:
