@@ -1,19 +1,40 @@
-FROM amazoncorretto:17
+# ---- Build Stage ----
+# Use a lightweight Maven image with OpenJDK 17 (Alpine-based)
+FROM maven:3.9.6-eclipse-temurin-17-alpine AS build
+
+# Set the working directory for the build
+WORKDIR /build
+
+# Copy only the Maven descriptor to leverage Docker cache for dependencies
+COPY pom.xml .uction
+RUN mvn dependency:go-offline
+
+# Copy the source code and build the application
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+# ---- Runtime Stage ----
+# Use a minimal OpenJDK 17 Alpine image for running the app
+FROM openjdk:17-alpine
+
+# Set the maintainer label
 LABEL maintainer="RajatSharma"
 
-# Set working directory
+# Set the working directory for the application
 WORKDIR /app
 
-# Create a volume for logs
+# Create a volume for logs (optional, for persistent log storage)
 VOLUME ["/app/logs"]
 
-# Copy the built JAR file
-COPY target/*.jar /app/app.jar
+# Copy the built JAR from the build stage
+COPY --from=build /build/target/*.jar /app/app.jar
 
 # Expose the application port
 EXPOSE 8080
 
-# Set the default active Spring profile (can be overridden at runtime)
+# Set the default active Spring profile.
+# This can be overridden at runtime by passing a different value:
+#   docker run -e SPRING_PROFILES_ACTIVE=prod ...
 ENV SPRING_PROFILES_ACTIVE=default
 
 # Run the application
